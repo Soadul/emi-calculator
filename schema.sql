@@ -1,0 +1,34 @@
+CREATE TABLE IF NOT EXISTS Customers (
+    Phone TEXT PRIMARY KEY,
+    Name TEXT NOT NULL,
+    FatherName TEXT,
+    MotherName TEXT,
+    Address TEXT,
+    RegistrationDate DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS Sales (
+    SaleID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Phone TEXT NOT NULL,
+    ProductName TEXT NOT NULL,
+    Brand TEXT,
+    Model TEXT,
+    TotalPrice REAL NOT NULL,
+    DownPayment REAL NOT NULL,
+    Tenure INTEGER NOT NULL,
+    MonthlyEMI REAL NOT NULL,
+    Date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Status TEXT DEFAULT 'Active',
+    FOREIGN KEY(Phone) REFERENCES Customers(Phone)
+);
+
+CREATE TABLE IF NOT EXISTS Payments (
+    PaymentID INTEGER PRIMARY KEY AUTOINCREMENT,
+    SaleID INTEGER NOT NULL,
+    Phone TEXT NOT NULL,
+    AmountPaid REAL NOT NULL,
+    Date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    RemainingBalance REAL NOT NULL,
+    FOREIGN KEY(SaleID) REFERENCES Sales(SaleID),
+    FOREIGN KEY(Phone) REFERENCES Customers(Phone)
+);

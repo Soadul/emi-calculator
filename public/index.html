@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMI Tracking App</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-slate-50 text-slate-800 font-inter antialiased">
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 to-slate-800 absolute inset-0 z-50">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md transform transition-all">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa-solid fa-store text-2xl text-indigo-600"></i>
+                </div>
+                <h2 class="text-2xl font-bold text-slate-800">Shop Dashboard</h2>
+                <p class="text-sm text-slate-500 mt-1">Enter password to access the system</p>
+            </div>
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label for="password" class="block text-sm font-medium text-slate-700">Password</label>
+                    <input type="password" id="password" required class="mt-1 block w-full px-4 py-3 border border-slate-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••">
+                </div>
+                <div id="login-error" class="text-red-500 text-sm hidden">Invalid password. Please try again.</div>
+                <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                    Access System
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div id="dashboard" class="hidden min-h-screen flex flex-col md:flex-row">
+        
+        <!-- Sidebar Navigation -->
+        <nav class="w-full md:w-64 bg-indigo-900 text-white flex-shrink-0">
+            <div class="p-6">
+                <div class="flex items-center gap-3 font-bold text-xl mb-2">
+                    <i class="fa-solid fa-chart-pie text-indigo-400"></i>
+                    <span>EMI Tracker</span>
+                </div>
+                <p class="text-xs text-indigo-300 mb-8">Offline Retail Management</p>
+            </div>
+            
+            <ul class="space-y-2 px-4">
+                <li>
+                    <button onclick="switchTab('search-tab')" id="nav-search-tab" class="w-full flex items-center gap-3 px-4 py-3 bg-indigo-800 rounded-lg text-left transition-colors">
+                        <i class="fa-solid fa-magnifying-glass"></i> Search & Payments
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchTab('add-customer-tab')" id="nav-add-customer-tab" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-indigo-800 rounded-lg text-left transition-colors text-indigo-200 hover:text-white">
+                        <i class="fa-solid fa-user-plus"></i> Add Customer
+                    </button>
+                </li>
+                <li>
+                    <button onclick="switchTab('new-sale-tab')" id="nav-new-sale-tab" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-indigo-800 rounded-lg text-left transition-colors text-indigo-200 hover:text-white">
+                        <i class="fa-solid fa-cart-plus"></i> New Sale
+                    </button>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+            
+            <!-- Toast Notification -->
+            <div id="toast" class="fixed top-4 right-4 bg-emerald-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 flex items-center gap-3 z-50">
+                <i class="fa-solid fa-circle-check"></i>
+                <span id="toast-message">Success!</span>
+            </div>
+
+            <!-- TAB: Search & Payments -->
+            <section id="search-tab" class="tab-content">
+                <h1 class="text-3xl font-bold mb-8 text-slate-800">Search Customer</h1>
+                
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8">
+                    <form id="search-form" class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1">
+                            <label for="search-phone" class="sr-only">Phone Number</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fa-solid fa-phone text-slate-400"></i>
+                                </div>
+                                <input type="tel" id="search-phone" required class="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter customer phone number">
+                            </div>
+                        </div>
+                        <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-medium whitespace-nowrap">
+                            <i class="fa-solid fa-search mr-2"></i> Search
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Customer Info Card (Hidden by default) -->
+                <div id="customer-info-card" class="hidden mb-8">
+                    <h2 class="text-xl font-bold mb-4 text-slate-700">Customer Details</h2>
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div>
+                                <p class="text-sm text-slate-500 mb-1">Name</p>
+                                <p id="disp-cust-name" class="font-semibold text-slate-800 text-lg">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 mb-1">Phone</p>
+                                <p id="disp-cust-phone" class="font-semibold text-slate-800 text-lg">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 mb-1">Address</p>
+                                <p id="disp-cust-address" class="font-semibold text-slate-800 text-lg">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 mb-1">Father's Name</p>
+                                <p id="disp-cust-father" class="font-semibold text-slate-800">-</p>
+                            </div>
+                            <div>
+                                <p class="text-sm text-slate-500 mb-1">Mother's Name</p>
+                                <p id="disp-cust-mother" class="font-semibold text-slate-800">-</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sales & EMI History (Hidden by default) -->
+                <div id="sales-history-container" class="hidden space-y-8">
+                    <!-- Dynamic content will be injected here via JS -->
+                </div>
+
+            </section>
+
+            <!-- TAB: Add Customer -->
+            <section id="add-customer-tab" class="tab-content hidden">
+                <h1 class="text-3xl font-bold mb-8 text-slate-800">Add New Customer</h1>
+                
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden max-w-2xl">
+                    <form id="add-customer-form" class="p-6 md:p-8 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-full md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Full Name *</label>
+                                <input type="text" id="cust-name" required class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div class="col-span-full md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Phone Number *</label>
+                                <input type="tel" id="cust-phone" required class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div class="col-span-full md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Father's Name</label>
+                                <input type="text" id="cust-father" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div class="col-span-full md:col-span-1">
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Mother's Name</label>
+                                <input type="text" id="cust-mother" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                            </div>
+                            <div class="col-span-full">
+                                <label class="block text-sm font-medium text-slate-700 mb-2">Full Address</label>
+                                <textarea id="cust-address" rows="3" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                            </div>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 flex justify-end">
+                            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium">
+                                Save Customer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- TAB: New Sale -->
+            <section id="new-sale-tab" class="tab-content hidden">
+                <h1 class="text-3xl font-bold mb-8 text-slate-800">Record New Sale</h1>
+                
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden max-w-3xl">
+                    <form id="new-sale-form" class="p-6 md:p-8 space-y-8">
+                        
+                        <!-- Customer Lookup -->
+                        <div>
+                            <h3 class="text-lg font-medium leading-6 text-slate-900 mb-4 border-b pb-2">1. Customer Identification</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Customer Phone *</label>
+                                    <div class="flex gap-2">
+                                        <input type="tel" id="sale-phone" required class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                        <button type="button" id="btn-verify-customer" class="bg-slate-800 text-white px-4 py-2 rounded-lg hover:bg-slate-700 transition-colors">Verify</button>
+                                    </div>
+                                    <p id="sale-customer-status" class="mt-2 text-sm text-slate-500"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Product Details -->
+                        <div>
+                            <h3 class="text-lg font-medium leading-6 text-slate-900 mb-4 border-b pb-2">2. Product Information</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="col-span-full md:col-span-1">
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Product Name *</label>
+                                    <input type="text" id="sale-product" required placeholder="e.g. Refrigerator" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <div class="col-span-full md:col-span-1">
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Brand</label>
+                                    <input type="text" id="sale-brand" placeholder="e.g. Walton" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                                <div class="col-span-full md:col-span-1">
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Model</label>
+                                    <input type="text" id="sale-model" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Financials -->
+                        <div class="bg-slate-50 p-6 rounded-lg border border-slate-200">
+                            <h3 class="text-lg font-medium leading-6 text-slate-900 mb-4 border-b pb-2">3. EMI Calculation (BDT ৳)</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Total Price (৳) *</label>
+                                    <input type="number" id="sale-price" required min="0" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Down Payment (৳) *</label>
+                                    <input type="number" id="sale-downpayment" required min="0" value="0" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 font-mono">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Tenure (Months) *</label>
+                                    <input type="number" id="sale-tenure" required min="1" max="60" value="12" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
+                            </div>
+                            
+                            <!-- Calculation Result -->
+                            <div class="flex items-center justify-between bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+                                <div>
+                                    <p class="text-sm text-indigo-800 font-medium">Calculated Monthly EMI</p>
+                                    <p class="text-xs text-indigo-600 mt-1">(Total Price - Down Payment) / Tenure</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-3xl font-bold text-indigo-700 font-mono">৳ <span id="sale-calc-emi">0.00</span></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 flex justify-end">
+                            <button type="submit" id="btn-submit-sale" disabled class="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-colors font-bold disabled:opacity-50 disabled:cursor-not-allowed">
+                                Confirm & Save Sale
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="hidden fixed inset-0 bg-slate-900 bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full overflow-hidden">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">Record Payment</h3>
+                <button onclick="closePaymentModal()" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+            <form id="payment-form" class="p-6 space-y-4">
+                <input type="hidden" id="pay-sale-id">
+                <input type="hidden" id="pay-phone">
+                <input type="hidden" id="pay-current-balance">
+                
+                <div>
+                    <p class="text-sm text-slate-500">Product</p>
+                    <p id="pay-product-name" class="font-semibold text-slate-800"></p>
+                </div>
+                
+                <div class="flex justify-between bg-slate-50 p-3 rounded-lg border border-slate-200">
+                    <div>
+                        <p class="text-xs text-slate-500 uppercase tracking-wider">Remaining Balance</p>
+                        <p class="font-bold text-red-600 font-mono">৳ <span id="pay-display-balance">0.00</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-slate-500 uppercase tracking-wider">Monthly EMI</p>
+                        <p class="font-bold text-indigo-600 font-mono">৳ <span id="pay-display-emi">0.00</span></p>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Amount Paid (৳) *</label>
+                    <input type="number" id="pay-amount" required min="1" class="block w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 text-lg font-mono">
+                </div>
+
+                <button type="submit" class="w-full mt-4 bg-emerald-600 text-white px-4 py-3 rounded-lg hover:bg-emerald-700 transition-colors font-bold text-lg">
+                    Confirm Payment
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
