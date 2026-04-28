@@ -1,4 +1,4 @@
-const API_URL = 'https://13.62.99.175:3000/api';
+const API_URL = 'http://13.62.99.175:3000/api';
 
 // --- Utility Functions ---
 
