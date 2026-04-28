@@ -26,13 +26,13 @@ function initializeDatabase() {
                 console.error('Error executing schema:', err.message);
             } else {
                 console.log('Database tables initialized properly.');
-                // Safely add InvoiceID column if it doesn't exist
+                // Safely add new columns if they don't exist
                 db.run('ALTER TABLE Sales ADD COLUMN InvoiceID TEXT', (err) => {
-                    if (err) {
-                        // Error expected if column already exists
-                    } else {
-                        console.log('Added InvoiceID column to Sales table.');
-                    }
+                    if (!err) console.log('Added InvoiceID column to Sales table.');
+                });
+                
+                db.run('ALTER TABLE Customers ADD COLUMN Image TEXT', (err) => {
+                    if (!err) console.log('Added Image column to Customers table.');
                 });
             }
         });

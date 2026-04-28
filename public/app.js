@@ -84,9 +84,21 @@ function switchTab(tabId) {
 document.getElementById('add-customer-form').addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const imageFile = document.getElementById('cust-image').files[0];
+    let base64Image = null;
+
+    if (imageFile) {
+        base64Image = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(imageFile);
+        });
+    }
+
     const payload = {
         name: document.getElementById('cust-name').value,
         phone: document.getElementById('cust-phone').value,
+        image: base64Image,
         fatherName: document.getElementById('cust-father').value,
         motherName: document.getElementById('cust-mother').value,
         address: document.getElementById('cust-address').value
@@ -221,6 +233,19 @@ document.getElementById('search-form').addEventListener('submit', async (e) => {
         document.getElementById('disp-cust-address').textContent = customer.Address || 'N/A';
         document.getElementById('disp-cust-father').textContent = customer.FatherName || 'N/A';
         document.getElementById('disp-cust-mother').textContent = customer.MotherName || 'N/A';
+        
+        const imgEl = document.getElementById('disp-cust-image');
+        const iconEl = document.getElementById('disp-cust-icon');
+        if (customer.Image) {
+            imgEl.src = customer.Image;
+            imgEl.classList.remove('hidden');
+            iconEl.classList.add('hidden');
+        } else {
+            imgEl.src = '';
+            imgEl.classList.add('hidden');
+            iconEl.classList.remove('hidden');
+        }
+        
         document.getElementById('customer-info-card').classList.remove('hidden');
 
         // 2. Get History

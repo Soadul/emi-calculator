@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS Customers (
     Phone TEXT PRIMARY KEY,
     Name TEXT NOT NULL,
+    Image TEXT,
     FatherName TEXT,
     MotherName TEXT,
     Address TEXT,

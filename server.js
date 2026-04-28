@@ -26,14 +26,14 @@ app.post('/api/login', (req, res) => {
 
 // API endpoint to add a customer
 app.post('/api/customers', (req, res) => {
-    const { phone, name, fatherName, motherName, address } = req.body;
+    const { phone, name, image, fatherName, motherName, address } = req.body;
 
     if (!phone || !name) {
         return res.status(400).json({ error: 'Phone and Name are required' });
     }
 
-    const stmt = db.prepare(`INSERT INTO Customers (Phone, Name, FatherName, MotherName, Address) VALUES (?, ?, ?, ?, ?)`);
-    stmt.run([phone, name, fatherName, motherName, address], function (err) {
+    const stmt = db.prepare(`INSERT INTO Customers (Phone, Name, Image, FatherName, MotherName, Address) VALUES (?, ?, ?, ?, ?, ?)`);
+    stmt.run([phone, name, image, fatherName, motherName, address], function (err) {
         if (err) {
             // If phone already exists, that's fine for our logic, we can just update or ignore
             if (err.message.includes('UNIQUE constraint failed')) {
