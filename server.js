@@ -58,14 +58,14 @@ app.get('/api/customers/:phone', (req, res) => {
 
 // API endpoint to add a new sale
 app.post('/api/sales', (req, res) => {
-    const { phone, productName, brand, model, totalPrice, downPayment, tenure, monthlyEMI } = req.body;
+    const { phone, invoiceId, productName, brand, model, totalPrice, downPayment, tenure, monthlyEMI } = req.body;
 
     if (!phone || !productName || !totalPrice || typeof downPayment !== 'number' || !tenure || !monthlyEMI) {
         return res.status(400).json({ error: 'Missing required fields' });
     }
 
-    const stmt = db.prepare(`INSERT INTO Sales (Phone, ProductName, Brand, Model, TotalPrice, DownPayment, Tenure, MonthlyEMI) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`);
-    stmt.run([phone, productName, brand, model, totalPrice, downPayment, tenure, monthlyEMI], function (err) {
+    const stmt = db.prepare(`INSERT INTO Sales (Phone, InvoiceID, ProductName, Brand, Model, TotalPrice, DownPayment, Tenure, MonthlyEMI) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+    stmt.run([phone, invoiceId, productName, brand, model, totalPrice, downPayment, tenure, monthlyEMI], function (err) {
         if (err) return res.status(500).json({ error: err.message });
 
         const saleId = this.lastID;

@@ -65,6 +65,11 @@
                         <i class="fa-solid fa-cart-plus"></i> New Sale
                     </button>
                 </li>
+                <li>
+                    <button onclick="switchTab('instructions-tab')" id="nav-instructions-tab" class="w-full flex items-center gap-3 px-4 py-3 hover:bg-indigo-800 rounded-lg text-left transition-colors text-indigo-200 hover:text-white">
+                        <i class="fa-solid fa-book"></i> User Manual
+                    </button>
+                </li>
             </ul>
         </nav>
 
@@ -196,7 +201,11 @@
                         <!-- Product Details -->
                         <div>
                             <h3 class="text-lg font-medium leading-6 text-slate-900 mb-4 border-b pb-2">2. Product Information</h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                <div class="col-span-full md:col-span-1">
+                                    <label class="block text-sm font-medium text-slate-700 mb-2">Invoice ID *</label>
+                                    <input type="text" id="sale-invoice" required placeholder="e.g. INV-001" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
+                                </div>
                                 <div class="col-span-full md:col-span-1">
                                     <label class="block text-sm font-medium text-slate-700 mb-2">Product Name *</label>
                                     <input type="text" id="sale-product" required placeholder="e.g. Refrigerator" class="block w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500">
@@ -248,6 +257,44 @@
                             </button>
                         </div>
                     </form>
+                </div>
+            </section>
+
+            <!-- TAB: Instructions -->
+            <section id="instructions-tab" class="tab-content hidden">
+                <h1 class="text-3xl font-bold mb-8 text-slate-800">User Manual & Instructions</h1>
+                
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden max-w-4xl p-8 space-y-6">
+                    <div>
+                        <h2 class="text-xl font-bold text-indigo-700 mb-2"><i class="fa-solid fa-1"></i> Adding a New Customer</h2>
+                        <p class="text-slate-600">Before you can sell a product on EMI, you must add the customer to the database. Navigate to the <strong>Add Customer</strong> tab, enter their exact phone number and personal details. The phone number acts as their unique ID.</p>
+                    </div>
+                    
+                    <div class="border-t border-slate-100 pt-6">
+                        <h2 class="text-xl font-bold text-indigo-700 mb-2"><i class="fa-solid fa-2"></i> Recording a New Sale</h2>
+                        <p class="text-slate-600 mb-2">Go to the <strong>New Sale</strong> tab. Follow these steps:</p>
+                        <ul class="list-disc pl-5 text-slate-600 space-y-1">
+                            <li>Enter the customer's phone number and click <strong>Verify</strong>. This ensures the customer exists.</li>
+                            <li>Enter the <strong>Invoice ID</strong>, Product Name, and other product details.</li>
+                            <li>Enter the Total Price, Down Payment, and Tenure (in months). The system will automatically calculate the Monthly EMI.</li>
+                            <li>Click <strong>Confirm & Save Sale</strong> to register the EMI contract.</li>
+                        </ul>
+                    </div>
+
+                    <div class="border-t border-slate-100 pt-6">
+                        <h2 class="text-xl font-bold text-indigo-700 mb-2"><i class="fa-solid fa-3"></i> Collecting Payments</h2>
+                        <p class="text-slate-600 mb-2">When a customer comes to pay their monthly installment:</p>
+                        <ul class="list-disc pl-5 text-slate-600 space-y-1">
+                            <li>Navigate to the <strong>Search & Payments</strong> tab.</li>
+                            <li>Search for their phone number. You will see a list of all products they have purchased.</li>
+                            <li>Find the Active product and click the green <strong>Record Payment</strong> button.</li>
+                            <li>The system will auto-fill the suggested EMI amount, but you can change it if they are paying a different amount. Click Confirm.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100 mt-6">
+                        <p class="text-sm text-indigo-800"><strong>Note on Total Paid:</strong> The system automatically calculates how much the customer has paid in total by subtracting their Remaining Balance from the initial Total Price.</p>
+                    </div>
                 </div>
             </section>
 

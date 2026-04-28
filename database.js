@@ -26,6 +26,14 @@ function initializeDatabase() {
                 console.error('Error executing schema:', err.message);
             } else {
                 console.log('Database tables initialized properly.');
+                // Safely add InvoiceID column if it doesn't exist
+                db.run('ALTER TABLE Sales ADD COLUMN InvoiceID TEXT', (err) => {
+                    if (err) {
+                        // Error expected if column already exists
+                    } else {
+                        console.log('Added InvoiceID column to Sales table.');
+                    }
+                });
             }
         });
     } else {

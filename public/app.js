@@ -166,6 +166,7 @@ document.getElementById('new-sale-form').addEventListener('submit', async (e) =>
 
     const payload = {
         phone: document.getElementById('sale-phone').value,
+        invoiceId: document.getElementById('sale-invoice').value,
         productName: document.getElementById('sale-product').value,
         brand: document.getElementById('sale-brand').value,
         model: document.getElementById('sale-model').value,
@@ -264,20 +265,22 @@ function renderSalesHistory(sales) {
             paymentRows = `<tr><td colspan="4" class="py-4 text-center text-sm text-slate-400">No payments made yet.</td></tr>`;
         }
 
+        const totalPaid = sale.TotalPrice - sale.currentBalance;
+
         const card = document.createElement('div');
         card.className = 'bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden';
         card.innerHTML = `
             <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
                 <div>
                     <h3 class="font-bold text-lg text-slate-800">${sale.ProductName} ${sale.Brand ? `(${sale.Brand})` : ''}</h3>
-                    <p class="text-xs text-slate-500">Purchased on ${formatDate(sale.Date)}</p>
+                    <p class="text-xs text-slate-500">Purchased on ${formatDate(sale.Date)} | <strong>Invoice:</strong> ${sale.InvoiceID || 'N/A'}</p>
                 </div>
                 <div>${statusBadge}</div>
             </div>
             
             <div class="p-6">
                 <!-- Summary Metrics -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
                     <div class="bg-slate-50 p-3 rounded-lg">
                         <p class="text-xs text-slate-500 mb-1">Total Price</p>
                         <p class="font-semibold text-slate-800">৳ ${formatMoney(sale.TotalPrice)}</p>
@@ -289,6 +292,10 @@ function renderSalesHistory(sales) {
                     <div class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
                         <p class="text-xs text-indigo-600 mb-1">Monthly EMI</p>
                         <p class="font-bold text-indigo-700">৳ ${formatMoney(sale.MonthlyEMI)}</p>
+                    </div>
+                    <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-100">
+                        <p class="text-xs text-emerald-600 mb-1">Total Paid</p>
+                        <p class="font-bold text-emerald-700">৳ ${formatMoney(totalPaid)}</p>
                     </div>
                     <div class="${isClosed ? 'bg-slate-50' : 'bg-red-50 border border-red-100'} p-3 rounded-lg">
                         <p class="text-xs ${isClosed ? 'text-slate-500' : 'text-red-500'} mb-1">Remaining Balance</p>
